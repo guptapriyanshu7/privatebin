@@ -1,1 +1,8 @@
-<textarea rows="40" cols="80"><%= data %></textarea>
+<% function isValidHttpUrl(string) { try { new URL(string); } catch (_) { return false; } return true; } %>
+  <% if(isValidHttpUrl(data)){ %>
+    <script>
+      window.location = '<%= data %>';
+    </script>
+    <% } else { %>
+      <textarea rows="40" cols="80"><%= data %></textarea>
+      <% } %>
