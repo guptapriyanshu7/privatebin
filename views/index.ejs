@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<body>
+  <form id='formElement'>
+    <textarea rows="40" cols="80" name='data'></textarea>
+    <div><input type='submit' value='Submit' /></div>
+  </form>
+  <div id="url"></div>
+  <script>
+    const formElement = document.getElementById('formElement');
+    formElement.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(formElement);
+
+      const res = await fetch('/save', {
+        method: 'POST',
+        body: new URLSearchParams(formData),
+      });
+
+      const urlElement = document.getElementById('url');
+      const url = await res.text();
+
+      urlElement.innerHTML = `Share URL: ${url}`;
+    });
+  </script>
+</body>
+
+</html>
