@@ -2,13 +2,18 @@
 <html lang='en'>
 
 <body>
+  <a href="/my-snippets">My Snippets</a>
   <form id='formElement'>
     <textarea rows="40" cols="80" name='data'></textarea>
     <div><input type='submit' value='Submit' /></div>
   </form>
   <div id="url"></div>
+  <div id="details"></div>
   <script>
     const formElement = document.getElementById('formElement');
+    const urlElement = document.getElementById('url');
+    const detailsElement = document.getElementById('details');
+
     formElement.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(formElement);
@@ -18,10 +23,18 @@
         body: new URLSearchParams(formData),
       });
 
-      const urlElement = document.getElementById('url');
-      const url = await res.text();
+      const resJson = await res.json();
 
-      urlElement.innerHTML = `Share URL: ${url}`;
+      urlElement.innerHTML = `Share URL: ${resJson.url}`;
+      detailsElement.innerHTML = `Access details at: ${resJson.details}`;
+
+      const localDataJsonStr = localStorage.getItem('data') || '{"data": []}';
+      const localDataJson = JSON.parse(localDataJsonStr);
+      localDataJson['data'].push({
+        text: formData.get('data').substr(0, 200),
+        url: resJson.url,
+      });
+      localStorage.setItem('data', JSON.stringify(localDataJson));
     });
   </script>
 </body>

@@ -1,0 +1,42 @@
+<style>
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+  }
+
+  td {
+    width: 500px;
+  }
+</style>
+<table>
+  <thead>
+    <tr>
+      <th>Text</th>
+      <th>Url</th>
+    </tr>
+  </thead>
+  <tbody id="tbody">
+  </tbody>
+</table>
+<script>
+  const tbodyElement = document.getElementById('tbody');
+
+  const localDataJsonStr = localStorage.getItem('data') || '{"data": []}';
+  const localDataJson = JSON.parse(localDataJsonStr);
+  const dataArr = localDataJson['data'];
+
+  const properties = ['text', 'url'];
+  for (let i = 0; i < dataArr.length; i++) {
+    const trElement = document.createElement('tr');
+    tbodyElement.appendChild(trElement);
+
+    for (let j = 0; j < 2; j++) {
+      const td = document.createElement('td');
+      td.innerHTML = dataArr[i][properties[j]];
+      trElement.appendChild(td);
+    }
+  }
+</script>

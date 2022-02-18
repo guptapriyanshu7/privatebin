@@ -4,11 +4,18 @@ exports.getDefaultPage = function (req, res) {
   res.render('index');
 };
 
+exports.getMySnippets = function (req, res) {
+  res.render('mySnippets');
+};
+
 exports.saveEntry = async function (req, res) {
   const data = new Data({ text: req.body['data'] });
   await data.save();
 
-  res.send(req.headers.host + '/' + data._id);
+  res.send({
+    url: req.headers.host + '/' + data._id,
+    details: req.headers.host + '/details/' + data._id,
+  });
 };
 
 exports.getEntryDetailPage = async function (req, res) {
@@ -17,8 +24,6 @@ exports.getEntryDetailPage = async function (req, res) {
 
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const date = new Date();
-
-    console.log(ip, date);
 
     data.access.push({ ip, date });
     await data.save();

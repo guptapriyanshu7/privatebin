@@ -1,18 +1,29 @@
+<style>
+  table,
+  th,
+  td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 10px;
+  }
+</style>
 <table>
-  <th>IP</th>
-  <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
-  <th>Date</th>
-  <% for(var i=0; i < access.length; i++) { %>
+  <thead>
     <tr>
-      <td>
-        <%= access[i].ip %>
-      </td>
-      <td>
-
-      </td>
-      <td>
-        <%= access[i].date %>
-      </td>
+      <th>IP</th>
+      <th>Date</th>
     </tr>
-    <% } %>
+  </thead>
+  <tbody>
+    <% for(var i=0; i < access.length; i++) { %>
+      <tr>
+        <td>
+          <%= access[i].ip %>
+        </td>
+        <td>
+          <%= access[i].date %>
+        </td>
+      </tr>
+      <% } %>
+  </tbody>
 </table>

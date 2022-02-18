@@ -1,17 +1,17 @@
 const express = require('express');
 
-const ec = require('../controllers/EntryController');
+const controller = require('../controllers/EntryController');
 
 const router = express.Router();
 
-router.get('/', ec.getDefaultPage);
+router.get('/', controller.getDefaultPage);
 
-router.get('/:id', ec.getEntryDetailPage);
+router.get('/my-snippets', controller.getMySnippets);
 
-router.post('/save', ec.saveEntry);
+router.get('/:id', controller.getEntryDetailPage);
 
-// router.post('/decrypt',ec.decryptPaste);
+router.post('/save', controller.saveEntry);
 
-router.get('/details/:id', ec.detailsForEntry);
+router.get('/details/:id', controller.detailsForEntry);
 
 module.exports = router;
