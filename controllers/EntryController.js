@@ -13,6 +13,7 @@ exports.saveEntry = async function (req, res) {
   await data.save();
 
   res.send({
+    id: data._id,
     url: req.headers.host + '/' + data._id,
     details: req.headers.host + '/details/' + data._id,
   });
@@ -50,4 +51,9 @@ exports.detailsForEntry = async function (req, res) {
       data: 'Something went wrong',
     });
   }
+};
+
+exports.deleteEntry = async function (req, res) {
+  await Data.findByIdAndDelete(req.params.id);
+  res.send();
 };

@@ -27,10 +27,11 @@
 
 ## My snippets page
 
-![image](https://user-images.githubusercontent.com/60141300/154764257-f5aaaa97-88d2-4652-8250-207aa57bc5fb.png)
+![image](https://user-images.githubusercontent.com/60141300/154793625-36755546-e4b8-4932-81d1-e35c1001b873.png)
 
 - Display all snippets created by user
 - Display all shareable links of snippets
+- Delete snippets by clicking on delete button
 
 #
 

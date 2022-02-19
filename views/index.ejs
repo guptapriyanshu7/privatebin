@@ -31,6 +31,7 @@
       const localDataJsonStr = localStorage.getItem('data') || '{"data": []}';
       const localDataJson = JSON.parse(localDataJsonStr);
       localDataJson['data'].push({
+        id: resJson.id,
         text: formData.get('data').substr(0, 200),
         url: resJson.url,
       });

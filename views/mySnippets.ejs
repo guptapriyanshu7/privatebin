@@ -16,6 +16,7 @@
     <tr>
       <th>Text</th>
       <th>Url</th>
+      <th>Delete</th>
     </tr>
   </thead>
   <tbody id="tbody">
@@ -29,6 +30,7 @@
   const dataArr = localDataJson['data'];
 
   const properties = ['text', 'url'];
+
   for (let i = 0; i < dataArr.length; i++) {
     const trElement = document.createElement('tr');
     tbodyElement.appendChild(trElement);
@@ -38,5 +40,19 @@
       td.innerHTML = dataArr[i][properties[j]];
       trElement.appendChild(td);
     }
+
+    const td = document.createElement('td');
+    td.innerHTML = '<button onclick="deleteSnippet(' + i + ')">Delete</button>';
+    trElement.appendChild(td);
+  }
+
+  async function deleteSnippet(index) {
+    const id = new URL(`https://${dataArr[index].url}`).pathname.substr(1);
+    await fetch(`/delete/${id}`, {
+      method: 'DELETE',
+    });
+    dataArr.splice(index, 1);
+    localStorage.setItem('data', JSON.stringify(localDataJson));
+    location.reload();
   }
 </script>

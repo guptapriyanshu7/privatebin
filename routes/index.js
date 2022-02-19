@@ -14,4 +14,6 @@ router.post('/save', controller.saveEntry);
 
 router.get('/details/:id', controller.detailsForEntry);
 
+router.delete('/delete/:id', controller.deleteEntry);
+
 module.exports = router;
