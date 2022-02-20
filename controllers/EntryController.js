@@ -12,16 +12,21 @@ exports.getMySnippets = function (req, res) {
 exports.saveEntry = async function (req, res) {
   let plainOrEncryptedData = req.body['data'];
   let iv;
+  let secretHash;
 
   if (req.body['secret']) {
-    const secretHash = cryptoUtils.hash(req.body['secret']);
+    secretHash = await cryptoUtils.hash(req.body['secret']);
     const encDataAndIv = cryptoUtils.encrypt(plainOrEncryptedData, secretHash);
 
     plainOrEncryptedData = encDataAndIv.encryptedData;
     iv = encDataAndIv.iv;
   }
 
-  const data = new Data({ text: plainOrEncryptedData, iv });
+  const data = new Data({
+    text: plainOrEncryptedData,
+    password: secretHash,
+    iv,
+  });
   await data.save();
 
   res.send({
@@ -68,10 +73,17 @@ exports.detailsForEntry = async function (req, res) {
 exports.decrypt = async function (req, res) {
   try {
     const data = await Data.findById(req.body['id']);
+    const match = await cryptoUtils.verify(data.password, req.body['secret']);
 
-    const secretHash = cryptoUtils.hash(req.body['secret']);
-    const decryptedData = cryptoUtils.decrypt(data.text, secretHash, data.iv);
+    if (!match) {
+      throw new Error('Secret mismatch');
+    }
 
+    const decryptedData = cryptoUtils.decrypt(
+      data.text,
+      data.password,
+      data.iv
+    );
     res.send(decryptedData);
   } catch (error) {
     res.send('Something went wrong');

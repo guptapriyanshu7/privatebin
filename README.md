@@ -6,7 +6,7 @@
 
 - Paste text / code / links
 - Get Share link
-- Get Acess Hisotry page link
+- Get Acess History page link
 
 ### Copying links will redirect to that link acting as a tinyUrl website
 
@@ -39,4 +39,4 @@ Snippets will expire after 24 hours, thanks to MongoDB TTL
 
 Website hosted at heroku and database at mongoDB Atlas
 
-- [https://polynomial-ai.herokuapp.com/](https://polynomial-ai.herokuapp.com/)
+- [https://pastebinn.herokuapp.com](https://pastebinn.herokuapp.com)

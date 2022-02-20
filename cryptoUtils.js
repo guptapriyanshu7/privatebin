@@ -1,14 +1,17 @@
 const crypto = require('crypto');
+const argon2 = require('argon2');
 
 const algorithm = 'AES-256-CBC';
 
+const generateKey = function (hash) {
+  return crypto.createHash('sha256').update(hash).digest();
+};
+
 exports.encrypt = function (text, secretHash) {
   const initVector = crypto.randomBytes(16);
-  const cipher = crypto.createCipheriv(
-    algorithm,
-    Buffer.from(secretHash, 'hex'),
-    initVector
-  );
+  const key = generateKey(secretHash);
+
+  const cipher = crypto.createCipheriv(algorithm, key, initVector);
 
   const encryptedData = Buffer.concat([cipher.update(text), cipher.final()]);
 
@@ -19,9 +22,11 @@ exports.encrypt = function (text, secretHash) {
 };
 
 exports.decrypt = function (encryptedData, secretHash, initVectorStr) {
+  const key = generateKey(secretHash);
+
   const decipher = crypto.createDecipheriv(
     algorithm,
-    Buffer.from(secretHash, 'hex'),
+    key,
     Buffer.from(initVectorStr, 'hex')
   );
 
@@ -33,9 +38,11 @@ exports.decrypt = function (encryptedData, secretHash, initVectorStr) {
   return decryptedData.toString('utf8');
 };
 
-exports.hash = function (secret) {
-  const hash = crypto.createHash('sha256');
-  hash.update(secret);
-  const digest = hash.digest('hex');
-  return digest;
+exports.hash = async function (secret) {
+  const hash = await argon2.hash(secret);
+  return hash;
+};
+
+exports.verify = function (hash, secret) {
+  return argon2.verify(hash, secret);
 };
