@@ -4,5 +4,24 @@
       window.location = '<%= data %>';
     </script>
     <% } else { %>
-      <textarea rows="40" cols="80"><%= data %></textarea>
+      <textarea id="message" rows="40" cols="80"><%= data %></textarea>
+      <form id='formElement'>
+        <div><input name='secret'></input></div>
+        <div><input type='submit' value='Submit' /></div>
+      </form>
+      <script>
+        formElement.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const formData = new FormData(formElement);
+          formData.append('id', window.location.pathname.substr(1));
+
+          const res = await fetch('/decrypt', {
+            method: 'POST',
+            body: new URLSearchParams(formData),
+          });
+
+          const data = await res.text();
+          document.getElementById('message').innerHTML = data;
+        });
+      </script>
       <% } %>

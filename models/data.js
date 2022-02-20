@@ -6,6 +6,7 @@ const dataSchema = new Schema({
   text: {
     type: String,
   },
+  iv: String,
   access: [
     {
       ip: String,

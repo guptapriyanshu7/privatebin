@@ -1,4 +1,5 @@
 const Data = require('../models/data');
+const cryptoUtils = require('../cryptoUtils');
 
 exports.getDefaultPage = function (req, res) {
   res.render('index');
@@ -9,7 +10,18 @@ exports.getMySnippets = function (req, res) {
 };
 
 exports.saveEntry = async function (req, res) {
-  const data = new Data({ text: req.body['data'] });
+  let plainOrEncryptedData = req.body['data'];
+  let iv;
+
+  if (req.body['secret']) {
+    const secretHash = cryptoUtils.hash(req.body['secret']);
+    const encDataAndIv = cryptoUtils.encrypt(plainOrEncryptedData, secretHash);
+
+    plainOrEncryptedData = encDataAndIv.encryptedData;
+    iv = encDataAndIv.iv;
+  }
+
+  const data = new Data({ text: plainOrEncryptedData, iv });
   await data.save();
 
   res.send({
@@ -50,6 +62,19 @@ exports.detailsForEntry = async function (req, res) {
     res.render('data', {
       data: 'Something went wrong',
     });
+  }
+};
+
+exports.decrypt = async function (req, res) {
+  try {
+    const data = await Data.findById(req.body['id']);
+
+    const secretHash = cryptoUtils.hash(req.body['secret']);
+    const decryptedData = cryptoUtils.decrypt(data.text, secretHash, data.iv);
+
+    res.send(decryptedData);
+  } catch (error) {
+    res.send('Something went wrong');
   }
 };
 
