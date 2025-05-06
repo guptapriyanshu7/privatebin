@@ -37,6 +37,3 @@
 
 Snippets will expire after 24 hours, thanks to MongoDB TTL
 
-Website hosted at heroku and database at mongoDB Atlas
-
-- [https://pastebinn.herokuapp.com](https://pastebinn.herokuapp.com)
